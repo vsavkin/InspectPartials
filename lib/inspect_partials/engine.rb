@@ -1,13 +1,9 @@
 module InspectPartials
   class InspectPartialsEngine < Rails::Engine
-
-    #initializer "inspect_partials_engine.load_static_assets" do |app|
-    #
-    #  p '------------'
-    #  p "#{root}/extension_public"
-    #
-    #  app.middleware.use ::ActionDispatch::Static, "#{root}/extension_public"
-    #end
+    initializer "inspect_partials_engine.add_rack_middleware" do |app|
+      app.middleware.use ::ActionDispatch::Static, "#{root}/app/assets"
+      app.middleware.use InspectPartials::RackHandler
+    end
 
     initializer "inspect_partials_engine.patch_action_view_template" do
       next unless config.respond_to?(:inspect_partials)
@@ -23,12 +19,17 @@ module InspectPartials
         private
         def source_wrapped_into_tooltip
           source = show_partials_railtie_old_source
-          %Q{<div class="tooltip" data-tip="#{relative_identifier}">#{source}</div>}
+          return source if layout?
+          %Q{<div class="inspect-partials-tooltip" data-tip="#{relative_identifier}">#{source}</div>}
         end
 
         def relative_identifier
           match = /app\/views.*/.match identifier
           match[0] ? match[0] : identifier
+        end
+
+        def layout?
+          relative_identifier =~ /layouts\//
         end
       end
     end

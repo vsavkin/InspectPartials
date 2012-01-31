@@ -1,0 +1,26 @@
+div.inspect-partials-tooltip {
+  display: block;
+}
+
+div.inspect-partials-tooltip::before {
+  content: attr(data-tip);
+
+  font-size: 10px;
+  position: fixed;
+  z-index: 999;
+  white-space: nowrap;
+  left: 5px;
+  top: 5px;
+  background: #000;
+  color: #e0e0e0;
+  padding: 0px 7px;
+  line-height: 24px;
+  height: 24px;
+  width: 500px;
+  opacity: 0;
+}
+
+div.inspect-partials-tooltip:hover::before {
+  opacity: 1;
+  bottom: -35px;
+}

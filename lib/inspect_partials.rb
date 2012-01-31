@@ -1,5 +1,3 @@
 require "inspect_partials/version"
-
-module InspectPartials
-  require 'inspect_partials/engine'
-end
+require "inspect_partials/rack_handler"
+require "inspect_partials/engine"
